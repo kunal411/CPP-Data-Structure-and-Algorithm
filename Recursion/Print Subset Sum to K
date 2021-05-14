@@ -1,0 +1,49 @@
+/*
+Given an array A and an integer K, print all subsets of A which sum to K.
+Subsets are of length varying from 0 to n, that contain elements of the array. But the order of elements should remain same as in the input array.
+Note : The order of subsets are not important. Just print them in different lines.
+Input format :
+Line 1 : Size of input array
+Line 2 : Array elements separated by space
+Line 3 : K 
+Sample Input:
+9 
+5 12 3 17 1 18 15 3 17 
+6
+Sample Output:
+3 3
+5 1
+*/
+
+#include <iostream>
+using namespace std;
+void printSubsetSumToKHelper(int input[], int size, int k,int output[], int outputSize) {
+
+    if(k == 0){
+        for(int i = 0; i < outputSize; i++)
+            cout << output[i] << " ";
+        cout << endl;
+        return;
+    }
+    if(size == 0){
+        return;
+    }
+    printSubsetSumToKHelper(input + 1, size - 1, k, output, outputSize);
+    output[outputSize] = input[0];
+    printSubsetSumToKHelper(input + 1, size - 1, k - input[0], output, outputSize + 1);
+}
+void printSubsetSumToK(int input[], int size, int k) {
+    int outputSize = 0;
+    int output[1000];
+    printSubsetSumToKHelper(input, size, k, output, outputSize);
+}
+
+
+int main() {
+  int input[1000],length,k;
+  cin >> length;
+  for(int i=0; i < length; i++)
+    cin >> input[i];
+  cin>>k;
+  printSubsetSumToK(input, length,k);
+}
