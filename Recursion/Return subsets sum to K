@@ -1,0 +1,67 @@
+/*
+Given an array A of size n and an integer K, return all subsets of A which sum to K.
+Subsets are of length varying from 0 to n, that contain elements of the array. But the order of elements should remain same as in the input array.
+Note : The order of subsets are not important.
+Input format :
+Line 1 : Integer n, Size of input array
+Line 2 : Array elements separated by space
+Line 3 : K 
+Constraints :
+1 <= n <= 20
+Sample Input :
+9 
+5 12 3 17 1 18 15 3 17 
+6
+Sample Output :
+3 3
+5 1
+*/
+
+#include <iostream>
+using namespace std;
+int subsetSumToKHelper(int input[], int size, int output[][50], int k, int outputRow, int temp[], int tempSize){
+
+    if (k == 0){
+        output[outputRow][0] = tempSize;
+        for(int i = 0; i < tempSize; i++){
+            output[outputRow][i+1] = temp[i];
+        }
+        return outputRow + 1;
+    }
+
+    if (size == 0 || k < 0){
+        return outputRow;
+    }
+
+    int smallOutput = subsetSumToKHelper(input + 1, size - 1, output, k, outputRow, temp, tempSize);
+    temp[tempSize] = input[0];
+    return subsetSumToKHelper(input + 1, size - 1, output, (k - input[0]), smallOutput, temp, tempSize + 1);
+
+}
+
+int subsetSumToK(int input[], int length, int output[][50], int k){
+
+    int temp[10000];
+    int tempSize = 0;
+    int outputRow = 0;
+    return subsetSumToKHelper(input, length, output, k, outputRow, temp, tempSize);
+
+}
+
+int main() {
+  int input[20],length, output[10000][50], k;
+  cin >> length;
+  for(int i=0; i < length; i++)
+    cin >> input[i];
+
+  cin >> k;
+  
+  int size = subsetSumToK(input, length, output, k);
+
+  for( int i = 0; i < size; i++) { 
+	for( int j = 1; j <= output[i][0]; j++) { 
+		cout << output[i][j] << " ";
+    }
+    cout << endl;
+  }
+}
