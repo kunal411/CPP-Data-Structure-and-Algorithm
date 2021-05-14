@@ -1,0 +1,111 @@
+/*
+Given an integer n, using phone keypad find out all the possible strings that can be made using digits of input n.
+Return empty string for numbers 0 and 1.
+Note : 1. The order of strings are not important.
+2. Input and output has already been managed for you. You just have to populate the output array and return the count of elements populated in the output array.
+Input Format :
+Integer n
+Output Format :
+All possible strings in different lines
+Constraints :
+1 <= n <= 10^6
+Sample Input:
+23
+Sample Output:
+ad
+ae
+af
+bd
+be
+bf
+cd
+ce
+cf
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+#include <string>
+using namespace std;
+
+string getStr(int num){
+
+    if (num == 2){
+        return "abc";
+    }
+    if (num == 3){
+        return "def";
+
+    }
+    if (num == 4){
+        return "ghi";
+
+    }
+    if (num == 5){
+        return "jkl";
+
+    }
+    if (num == 6){
+        return "mno";
+
+    }if (num == 7){
+        return "pqrs";
+
+    }
+    if (num == 8){
+        return "tuv";
+
+    }
+    if (num == 9){
+        return "wxyz";
+
+    }
+    else{
+        return " ";
+    }
+}
+
+int keypad(int num, string output[]){
+
+    if (num == 0){
+        output[0] = "";
+        return 1;
+    }
+
+    
+    int small = num / 10;
+    int smallOutput = keypad(small, output);
+    int smallNum = num % 10;
+    string str = getStr(smallNum);
+	
+    int temp = 0;
+    for(int i = 0; i < str.size() - 1; i++){
+        for(int j = 0; j < smallOutput; j++){
+            output[smallOutput + temp] = output[j];
+            temp++;
+        }
+    }
+    temp = 0;
+    for(int i = 0; i < str.size(); i++){
+        for(int j = 0; j < smallOutput; j++){
+            output[temp] += str[i];
+            temp++;
+        }
+    }
+
+    return str.size() * smallOutput;
+
+}
+
+int main(){
+    int num;
+    cin >> num;
+
+    string output[10000];
+    int count = keypad(num, output);
+    for(int i = 0; i < count && i < 10000; i++){
+        cout << output[i] << endl;
+    }
+    return 0;
+}
