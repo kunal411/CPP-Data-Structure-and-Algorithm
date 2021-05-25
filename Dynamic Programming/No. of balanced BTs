@@ -55,7 +55,7 @@ int heightHelper(int h, int * dp){
 }
 
 
-int binaryTreesOfHeightH(int h) {
+int balancedBTs(int h) {
 
     int * dp = new int[h + 1];
     for (int i = 0; i < h + 1; i++){
