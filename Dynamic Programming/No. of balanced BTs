@@ -22,25 +22,49 @@ Sample Output 2:
 #include <iostream>
 using namespace std;
 
-int balancedBTs(int h) {
-    if(h==0 || h==1)
+#include<cmath>
+int heightHelper(int h, int * dp){
+
+    if (h <= 1){
         return 1;
-    int ar[h+1];
-    ar[0]=1;
-    ar[1]=1;
-    ar[2]=3;
-    for(int i=3;i<=h;i++)
-    {
-    int a=ar[i-1];
-    int b=ar[i-2];
-    int x=(int)(((long)(a)*a)%1000000007);
-    int y=(int)(((long)(a)*2*b)%1000000007);
-    int ans=(x+y)%1000000007;
-        ar[i]=ans;
     }
-    return ar[h];
+
+    int x;
+    if (dp[h - 1] == -1){
+        x = heightHelper(h - 1, dp);
+    }
+    else{
+        x = dp[h - 1];
+    }
+
+    int y;
+    if (dp[h - 2] == -1){
+        y = heightHelper(h - 2, dp);
+    }
+    else{
+        y = dp[h - 2];
+    }
+
+    int mod = (int) (pow(10, 9)) + 7;
+    int temp1 = (int) (((long) (x)*x) % mod);
+    int temp2 = (int) ((2 * (long)(x) * y) % mod);
+    int ans = (temp1 + temp2) % mod;
+    dp[h] = ans;
+    return ans;
 
 }
+
+
+int binaryTreesOfHeightH(int h) {
+
+    int * dp = new int[h + 1];
+    for (int i = 0; i < h + 1; i++){
+        dp[i] = -1;
+    }
+    return heightHelper(h, dp);
+
+}
+
 
 int main() {
     int n;
