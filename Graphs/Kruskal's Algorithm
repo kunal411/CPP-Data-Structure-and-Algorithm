@@ -1,0 +1,83 @@
+#include<algorithm>
+#include <iostream>
+using namespace std;
+
+class Edge{
+    
+public:
+    int src;
+    int dstn;
+    int weight;
+};
+
+bool compare(Edge e1, Edge e2){
+    return e1.weight < e2.weight;
+}
+
+int findParent(int * parents, int index){
+    
+    while(parents[index] != index){
+        index = parents[index];
+    }
+    return index;
+    
+}
+
+void findMST(Edge * input, int n, int e, Edge * output, int * parents){
+    
+    int count = 0;
+    int i = 0;
+    while (count < n - 1){
+        Edge curr = input[i];
+        if (findParent(parents, curr.src) != findParent(parents, curr.dstn)){
+            output[count] = curr;
+            count++;
+            i++;
+            parents[findParent(parents, curr.src)] = findParent(parents, curr.dstn);
+        }
+        else{
+            i++;
+        }
+    }
+    
+}
+
+
+int main() {
+    
+    int n, e;
+    cin >> n >> e;
+    Edge * arr = new Edge[e];
+    
+    for (int i = 0; i < e; i++){
+        int src, dstn, weight;
+        cin >> src >> dstn >> weight;
+        Edge e1;
+        e1.src = src;
+        e1.dstn = dstn;
+        e1.weight = weight;
+        arr[i] = e1;
+    }
+    
+    sort(arr, arr + e, compare);
+    
+    int * parents = new int[n];
+    for (int i = 0; i < n; i++){
+        parents[i] = i;
+    }
+    
+    Edge * output = new Edge[n - 1];
+    
+    findMST(arr, n, e, output, parents);
+    
+    for (int i = 0; i < n - 1; i++){
+        if (output[i].src > output[i].dstn){
+            cout << output[i].dstn << " " << output[i].src<< " " << output[i].weight << endl;
+        }
+        else{
+            cout << output[i].src << " " << output[i].dstn << " " << output[i].weight << endl;
+        }
+    }
+    
+    
+}
