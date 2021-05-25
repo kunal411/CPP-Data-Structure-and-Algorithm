@@ -1,0 +1,85 @@
+#include <iostream>
+using namespace std;
+#include<climits>
+
+int findMin(bool * visited, int * weights, int n){
+    int mini = INT_MAX;
+    int index;
+    for (int i = 0; i < n; i++){
+        if(visited[i] == false && weights[i] < mini){
+            mini = weights[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+void findMST(int ** mat, int n, bool * visited, int * weights, int * parents){
+    
+    for (int i = 0; i < n; i++){
+        int curr = findMin(visited, weights, n);
+        for (int j = 0; j < n; j++){
+            if (mat[j][curr] > 0 && visited[j] == false){
+                if (weights[j] > mat[j][curr]){
+                    weights[j] = mat[j][curr];
+                	parents[j] = curr;
+                }
+            }
+        }
+        visited[curr] = true;
+    }
+}
+
+int main() {
+    int n, e;
+    cin >> n >> e;
+    
+    int ** mat = new int*[n];
+    
+    for (int i = 0; i < n; i++){
+        mat[i] = new int[n];
+        for (int j = 0; j < n; j++){
+            mat[i][j] = 0;
+        }
+    }
+    
+    for (int i = 0; i < e; i++){
+        int src, dest, weight;
+        
+        cin >> src >> dest >> weight;
+        mat[src][dest] = weight;
+        mat[dest][src] = weight;
+    }
+    
+    bool * visited = new bool[n];
+    for (int i = 0; i < n; i++){
+        visited[i] = false;
+    }
+    
+    int * weights = new int[n];
+    for (int i = 0; i < n; i++){
+        if (i == 0){
+            weights[i] = 0;
+        }
+        else{
+            weights[i] = INT_MAX;
+        }
+    }
+    
+    int * parents = new int[n];
+    for (int i = 0; i < n; i++){
+        parents[i] = -1;
+    }
+    
+    findMST(mat, n, visited, weights, parents);
+    
+    for (int i = 1; i < n; i++){
+        if(parents[i] < i){
+            cout << parents[i] << " " << i << " " << weights[i] << endl;
+        }
+        else{
+            cout << i << " " << parents[i] << " " << weights[i] << endl;
+        }
+    }
+    
+}
