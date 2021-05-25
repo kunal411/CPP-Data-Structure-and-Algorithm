@@ -1,0 +1,71 @@
+#include <iostream>
+#include<climits>
+using namespace std;
+
+int getMin(bool * visited, int * weight, int n){
+    int index;
+    int mini = INT_MAX;
+    for (int i = 0; i < n; i++){
+        if(weight[i] < mini && visited[i] == false){
+            mini = weight[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+void findPath(int ** mat, int n, bool * visited, int * weight, int sv){
+    
+    weight[sv] = 0;
+    
+    for (int i = 0; i < n; i++){
+        int curr = getMin(visited, weight, n);
+        for (int j = 0; j < n; j++){
+            if (mat[curr][j] > 0 && visited[j] == false){
+                if(weight[j] > weight[curr] + mat[curr][j]){
+                    weight[j] = weight[curr] + mat[curr][j];
+                }
+            }
+        }
+        visited[curr] = true;
+    }
+    
+}
+
+int main() {
+    
+    int n, e;
+    cin >> n >> e;
+    
+    int ** mat = new int*[n];
+    for (int i = 0; i < n; i++){
+        mat[i] = new int[n];
+        for (int j = 0; j < n; j++){
+            mat[i][j] = 0;
+        }
+    }
+    
+    for (int i = 0; i < e; i++){
+        int f, s, weight;
+        cin >> f >> s >> weight;
+        mat[f][s] = weight;
+        mat[s][f] = weight;
+    }
+    
+    bool * visited = new bool[n];
+    for (int i = 0; i < n; i++){
+        visited[i] = false;
+    }
+    
+    int * weight = new int[n];
+    for (int i = 0; i < n; i++){
+        weight[i] = INT_MAX;
+    }
+    
+    findPath(mat, n, visited, weight, 0);
+    
+    for (int i = 0; i < n; i++){
+        cout << i << " " << weight[i] << endl;
+    }
+    
+}
